@@ -76,8 +76,13 @@ void sr_handlepacket(struct sr_instance* sr,
   
     /*Discover Type: ARP or IP*/
     etherType = discoverEtherType(packet);
-    fprintf(stderr, "EtherType: 0x%04x\n\n", etherType);
-    //printEthernetHeader(packet);
+    if(etherType == ETHERTYPE_ARP)
+      fprintf(stderr, "ARP packet: EtherType: 0x%04x\n\n", etherType);
+   else if(etherType == ETHERTYPE_IP)
+     fprintf(stderr, "IP packet: EtherType: 0x%04x\n\n", etherType);
+   else 
+     fprintf(stderr, "Uknown packet type - EtherType: 0x%04x\n\n", etherType);
+      
     
     
   

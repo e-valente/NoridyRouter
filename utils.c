@@ -11,12 +11,12 @@
 
 uint16_t discoverEtherType(uint8_t *packet) {
   uint16_t ether_type;
-  struct sr_ethernet_hdr *ehdr;
-  
-  ehdr = (struct sr_ethernet_hdr*)packet;
    
- //ether_type = *(uint16_t*) packet + (2 * ETHER_ADDR_LEN * sizeof(uint8_t));
- ether_type = ehdr->ether_type;
+  /*struct sr_ethernet_hdr has the dst[ETHER_ADDR_LEN] and src[ETHER_ADDR_LEN] 
+   *and then ether_type
+   */
+ ether_type = *(uint16_t*) (packet + (2 * ETHER_ADDR_LEN * sizeof(uint8_t)));
+ 
  return ntohs(ether_type);
   
 }
