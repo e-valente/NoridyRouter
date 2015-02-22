@@ -21,6 +21,7 @@
 #include "sr_rt.h"
 #include "sr_router.h"
 #include "sr_protocol.h"
+#include "utils.h"
 
 /*--------------------------------------------------------------------- 
  * Method: sr_init(void)
@@ -66,31 +67,21 @@ void sr_handlepacket(struct sr_instance* sr,
     assert(sr);
     assert(packet);
     assert(interface);
-    //struct sr_ethernet_hdr *myetherpaket;
-    //uint8_t tmp[6];
-    struct sr_ethernet_hdr *ehdr;
-    int pos = 0;
     
-    ehdr = (struct sr_ethernet_hdr*)malloc(sizeof(struct sr_ethernet_hdr));
-    memcpy(ehdr, packet, sizeof(struct sr_ethernet_hdr));
-    
-
+    uint16_t etherType;
+  
+  
     printf("*** -> Received packet of length %d \n",len);
     printf("****-> from interface %s\n", interface);
   
-  uint8_t *array = ehdr->ether_shost;
+    /*Discover Type: ARP or IP*/
+    etherType = discoverEtherType(packet);
+    fprintf(stderr, "EtherType: 0x%04x\n\n", etherType);
+    //printEthernetHeader(packet);
+    
+    
   
-  printf("DST:\n");
-  for (; pos < ETHER_ADDR_LEN; pos++) {
-    uint8_t cur = array[pos];
-    //uint8_t cur = ehdr->ether_dhost[pos];
-    if (pos > 0) {
-      fprintf(stderr, ":");
-    }
-    //each byte
-    fprintf(stderr, "%02X", ntohs(cur));
-  }
-  fprintf(stderr, "\n");
+  
 
 }/* end sr_ForwardPacket */
 

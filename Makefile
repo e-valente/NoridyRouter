@@ -42,19 +42,29 @@ sr_SRCS = vnlconn.c sr_router.c sr_main.c  \
           sr_if.c sr_rt.c sr_vns_comm.c   \
           sr_dumper.c sha1.c
 
+emanuel_SRCS = utils.c
+
 sr_OBJS = $(patsubst %.c,%.o,$(sr_SRCS))
+emanuel_OBJS = $(patsubst %.c,%.o,$(emanuel_SRCS))
 sr_DEPS = $(patsubst %.c,.%.d,$(sr_SRCS))
+emanuel_DEPS = $(patsubst %.c,.%.d,$(emanuel_SRCS))
 
 $(sr_OBJS) : %.o : %.c
 	$(CC) -c $(CFLAGS) $< -o $@
+	
+$(emanuel_OBJS) : %.o : %.c
+	$(CC) -c $(CFLAGS) $< -o $@	
 
 $(sr_DEPS) : .%.d : %.c
 	$(CC) -MM $(CFLAGS) $<  > $@
 
+$(emanuel_DEPS) : .%.d : %.c
+	$(CC) -MM $(CFLAGS) $<  > $@
+
 include $(sr_DEPS)	
 
-sr : $(sr_OBJS)
-	$(CC) $(CFLAGS) -o sr $(sr_OBJS) $(LIBS)
+sr : $(sr_OBJS) $(emanuel_OBJS)
+	$(CC) $(CFLAGS) -o sr $(sr_OBJS) $(emanuel_OBJS) $(LIBS)
 
 sr.purify : $(sr_OBJS)
 	$(PURIFY) $(CC) $(CFLAGS) -o sr.purify $(sr_OBJS) $(LIBS)
