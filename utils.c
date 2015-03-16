@@ -8,6 +8,54 @@
 #include "sr_protocol.h"
 #include "utils.h"
 
+const char* icmp_to_string( uint8_t type ) {
+    switch( type ) {
+    case 0:  return "Reply";
+    case 3:  return "Unreachable";
+    case 8:  return "Request";
+    case 11: return "Timeout";
+    default: return "???";
+    }
+}
+
+const char* ip_proto_to_string( unsigned char proto ) {
+    switch( proto ) {
+    case IPPROTO_ICMP: return "ICMP";
+    case IPPROTO_TCP:  return "TCP";
+    case IPPROTO_UDP:  return "UDP";
+    default:           return "Unknown Protocol";
+    }
+}
+
+const char* ip_to_string( uint32_t ip ) {
+    struct in_addr addr;
+    static char buf[2][16];
+    static int on;
+    const char* tmp;
+
+    addr.s_addr = ip;
+    tmp = inet_ntoa( addr );
+
+    on = (on + 1) % 2;
+    return memcpy( buf[on], tmp, 16 );
+}
+
+const char* hw_addr_to_string( unsigned char* addr_hw ) {
+    static char buf[2][18]; /* 12 hex chars, 5 colons, 1 nul */
+    static int on;
+
+    on = (on + 1) % 2;
+    sprintf( buf[on], "%X%X:%X%X:%X%X:%X%X:%X%X:%X%X", 
+             addr_hw[0] >> 4, 0x0F & addr_hw[0],
+             addr_hw[1] >> 4, 0x0F & addr_hw[1],
+             addr_hw[2] >> 4, 0x0F & addr_hw[2],
+             addr_hw[3] >> 4, 0x0F & addr_hw[3],
+             addr_hw[4] >> 4, 0x0F & addr_hw[4],
+             addr_hw[5] >> 4, 0x0F & addr_hw[5] );
+
+    return buf[on];
+}
+
 
 uint16_t discoverEtherType(uint8_t *packet) {
   uint16_t ether_type;

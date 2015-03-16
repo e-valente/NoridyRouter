@@ -21,6 +21,7 @@
 #include "sr_rt.h"
 #include "sr_router.h"
 #include "sr_protocol.h"
+#include "arp.h"
 #include "utils.h"
 
 /*--------------------------------------------------------------------- 
@@ -76,14 +77,16 @@ void sr_handlepacket(struct sr_instance* sr,
   
     /*Discover Type: ARP or IP*/
     etherType = discoverEtherType(packet);
-    if(etherType == ETHERTYPE_ARP)
+    if(etherType == ETHERTYPE_ARP) {
       fprintf(stderr, "ARP packet: EtherType: 0x%04x\n\n", etherType);
+      handleARP(sr, (struct sr_arphdr *) (packet + ETHER_HDR_LEN));
+      
+    }
    else if(etherType == ETHERTYPE_IP)
      fprintf(stderr, "IP packet: EtherType: 0x%04x\n\n", etherType);
    else 
      fprintf(stderr, "Uknown packet type - EtherType: 0x%04x\n\n", etherType);
-   
-   //TODO
+
       
     
     
