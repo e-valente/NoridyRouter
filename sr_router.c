@@ -79,7 +79,7 @@ void sr_handlepacket(struct sr_instance* sr,
     etherType = discoverEtherType(packet);
     if(etherType == ETHERTYPE_ARP) {
       fprintf(stderr, "ARP packet: EtherType: 0x%04x\n\n", etherType);
-      handleARP(sr, (struct sr_arphdr *) (packet + ETHER_HDR_LEN));
+      handleARP(sr, (struct sr_arphdr *) (packet + ETHER_HDR_LEN), interface);
       
     }
    else if(etherType == ETHERTYPE_IP)

@@ -15,4 +15,4 @@
 
 #include "sr_router.h"
 
-void handleARP(struct sr_instance *sr, struct sr_arphdr *arp_hdr);
+void handleARP(struct sr_instance *sr, struct sr_arphdr *arp_hdr, char* interface);
