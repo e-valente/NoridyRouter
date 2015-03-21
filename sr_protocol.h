@@ -149,5 +149,14 @@ struct sr_arphdr
     uint32_t        ar_tip;             /* target IP address            */
 } __attribute__ ((packed)) ;
 
+/* Structure of a ICMP header
+ */
+struct sr_icmp_hdr {
+  uint8_t icmp_type;
+  uint8_t icmp_code;
+  uint16_t icmp_sum;
+  
+} __attribute__ ((packed)) ;
+
 
 #endif /* -- SR_PROTOCOL_H -- */
